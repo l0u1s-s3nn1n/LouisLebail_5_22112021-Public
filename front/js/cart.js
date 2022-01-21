@@ -6,47 +6,24 @@
 //JSON.parse(string) TRANSFORME string en objet
 // Produit
 //Récupérer les données du localstorage enregistrées dans product.js
-let recupererLocalStorage = localStorage.getItem("product");
+let recupererLocalStorage = localStorage.getItem("cartProduct");
 let parseLocalStorage = JSON.parse(recupererLocalStorage);
 console.log(parseLocalStorage);
 
+
+//HTML à modifié
 let cartItems = document.querySelector("#cart__items");
-let productTemplate = document.querySelector("#productTemplate");
-parseLocalStorage.forEach(element => {
 
-    let productNode = document.importNode(productTemplate.content, true);
-   
-    productNode.querySelector(".itemQuantity").innerText= element.quantity;
-    cartItems.appendChild(productNode);
-});
-//Gestion du formulaire
-document.querySelector('form').addEventListener('submit', (event) => {
-    event.preventDefault();
-    let data = new FormData(document.querySelector('.cart__order__form'));
+if (parseLocalStorage === null) {
+    //Si le panier est vide
+    const EmptyCart = `
     
-    fetch('http://localhost:3000/api/products/order', {
-        method: 'POST',
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({
-            contact: {
-                firstName: data.get('firstName'),
-                lastName: data.get('lastName'),
-                address: data.get('address'),
-                city: data.get('city'),
-                email: data.get('email'),
-            },
-            products: ["product", "products"]
-        })  
-    }).then(response => {
-        if (response.status === 201) {
-
-            let data = response.json();
-
-            window.location.href = '/confirmation.html?orderid = ' + data.orderId;
-        } else {
-            alert('Une erreur est survenue');
-        }
-    })
-})
+          <div>
+              <div>
+                  Le panier est vide
+              </div>
+          </div>
+          `;
+    productsInCart.innerHTML = EmptyCart;
+  }
+  else {
