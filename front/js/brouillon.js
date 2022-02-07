@@ -49,3 +49,45 @@ let whenClickAjouter = document.querySelector('#addToCart').addEventListener('cl
 
 
 */
+
+/*//TEST boucle mise à jour quantité d'un même produit
+
+ajouterSameProduct(id, quantity.value) =() => {
+    for(item of panier){
+       if(articleId == item.id){//si l'article ajouté correspond à un article du panier
+          item.qté += qté; // modifier sa quantité
+          return; //mettre fin à la fonction
+       }
+    }
+    //les instructions suivantes ne seront exécutées que si l'article n'est pas déjà présent dans le panier
+    panier.push({id: articleId, qté: qté});//ajouter l'article et sa quantité dans le panier
+ }
+    
+
+test1:
+
+else if (getProduct !== null) 
+    for (i = 0; i < getProduct.length; i++) { 
+        if (arrayProduct[i]._id == idProduct.id && arrayProduct[i].colors == select.value) {
+            return(
+                arrayProduct[i].quantityProduct++,
+                console.log("quantityProduct++"),
+                localStorage.setItem("produits", JSON.stringify(arrayProduct)),
+                (arrayProduct = JSON.parse(localStorage.getItem("produits")))		
+                );
+        }
+    }
+    
+
+    test2:
+
+    for (let i = 0; i < arrayProduct.length; i++) {
+    newQuantity += arrayProduct[i] + 'quantity.value';
+    quantity.value = newQuantity;
+  }
+  
+  
+  
+  
+  
+  
