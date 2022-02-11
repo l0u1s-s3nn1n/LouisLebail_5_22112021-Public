@@ -19,7 +19,7 @@ const recupereProduitParID = async () => {
 
 //Affiche le produit récupérer dans le DOM
 const afficherLeProduit = (product) => {
-
+    console.log(product);
     //Balise title
     let titleDOM = document.getElementsByTagName("title");
     titleDOM.innerHTML = product.name;
@@ -82,10 +82,10 @@ const ajouterAuPanier = () => {
             quantity : productQuantity,
             color : productColor,
             //supprimer les éléments qui seront donc ajouter par un fetch dans le cart.js
-            name : productName,
+           /* name : productName,
             imgUrl : productImg,
             altTxt : productAlt,
-            price : productPrice
+            price : productPrice*/
 
         };
 

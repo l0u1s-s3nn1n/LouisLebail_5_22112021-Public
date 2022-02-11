@@ -4,7 +4,7 @@ const afficherCommande = () => {
     let url = new URL(str);
     let orderId = url.searchParams.get("id");
     //Insertion dans le DOM
-    document.getElementById("orderId").innerText = `${orderId}`;
+    document.getElementById("orderId").innerText = `${orderId}. ` + "Merci pour votre commande.";
     //Vide le localstorage pour nouvelle commande
     localStorage.clear();
 }

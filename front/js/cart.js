@@ -45,7 +45,7 @@ const AfficherPanier = () => {
 
   // Si panier rempli
   else {
-
+    let promesse = [];
   //Affichage produit(s) via DOM
   for (let j in produitsDansLocalStorage) {
       //intégrer fetch pour dynamiser les données qui n'apparaissent plus dans le storage 
@@ -54,19 +54,32 @@ const AfficherPanier = () => {
             altTxt : productAlt,
             price : productPrice*/
       //Récupère les données d'un produit selon l'ID
-      /*let getDataApiToDisplay = async () => {
-          await fetch('http://localhost:3000/api/products/' + )
+      let getDataApiToDisplay = (num) => {
+        return new Promise((resolve, reject) => {
+             fetch('http://localhost:3000/api/products/' + produitsDansLocalStorage[num].id)
           .then((response) => {
               console.log(response)
               return response.json();
           })
           .then((product) => {
-            AfficherPanier(product);
+            //AfficherPanier(product);
+            //Promesse permettant de passer au then ensuite
+              resolve(product);
+            });
           })
       }
-      getDataApiToDisplay ();*/
-
-
+      promesse.push(getDataApiToDisplay(j).then((product) => {
+        console.log(product);
+        for (let k in produitsDansLocalStorage)  {
+          if (produitsDansLocalStorage[k].id == product._id){
+          produitsDansLocalStorage[k].name = product.name
+          produitsDansLocalStorage[k].imgUrl = product.imageUrl
+          produitsDansLocalStorage[k].altTxt = product.altTxt
+          produitsDansLocalStorage[k].price = product.price
+        }}
+      }));
+      
+/*
     //Afficher les produits
 
     let createArticle = document.createElement("article");
@@ -141,10 +154,88 @@ const AfficherPanier = () => {
     let createDeleteP = document.createElement("p");
     createDeleteDiv.appendChild(createDeleteP);
     createDeleteP.className = "deleteItem";
-    createDeleteP.innerText = "Supprimer";
+    createDeleteP.innerText = "Supprimer";*/
   }
+    Promise.all(promesse).then( ()=>{
+      for ( let j in produitsDansLocalStorage) {
+        let createArticle = document.createElement("article");
+    document.getElementById("cart__items").appendChild(createArticle);
+    createArticle.className = "cart__item";
+    createArticle.setAttribute("data-id", produitsDansLocalStorage[j].id)
+    createArticle.setAttribute("data-color", produitsDansLocalStorage[j].color)
+    
+    //Div Image
+    let createDivImg = document.createElement("div");
+    createArticle.appendChild(createDivImg);
+    createDivImg.className = "cart__item__img";
 
-    calculPanier();
+    //Img, src, alt
+    let createImg = document.createElement("img");
+    createDivImg.appendChild(createImg);
+    createImg.setAttribute ("src", produitsDansLocalStorage[j].imgUrl);
+    createImg.setAttribute ("alt", produitsDansLocalStorage[j].altTxt);
+    
+    //Div produit
+    let createDivContent = document.createElement("div");
+    createArticle.appendChild(createDivContent);
+    createDivContent.className = "cart__item__content";
+    
+    //Div cart_item (nom du produit, couleur, prix) 
+    let createDivDescription = document.createElement("div");
+    createDivContent.appendChild(createDivDescription);
+    createDivDescription.className = "cart__item__content__description";
+  
+    //nom du produit <h2>
+    let createH2 = document.createElement("h2");
+    createDivDescription.appendChild(createH2);
+    createH2.innerText = produitsDansLocalStorage[j].name;
+    //couleur <p>
+    let createColorP = document.createElement("p");
+    createDivDescription.appendChild(createColorP);
+    createColorP.innerText = produitsDansLocalStorage[j].color;
+    //prix <p>
+    let createPriceP = document.createElement("p");
+    createDivDescription.appendChild(createPriceP);
+    createPriceP.innerText = produitsDansLocalStorage[j].price + ",00" + " €";
+  
+    //cart.html : <div class="cart__item__content__settings">
+    let createQuantityDiv = document.createElement("div");
+    createDivContent.appendChild(createQuantityDiv);
+    createQuantityDiv.className = "cart__item__content__settings";
+    
+    //cart.html : <div class="cart__item__content__settings__quantity">
+    let createInputDiv = document.createElement("div");
+    createQuantityDiv.appendChild(createInputDiv);
+    createInputDiv.className = "cart__item__content__settings__quantity";
+  
+    let createQuantityP = document.createElement("p");
+    createInputDiv.appendChild(createQuantityP);
+    createQuantityP.innerText = "Qté : ";
+    
+    let createQuantityInput = document.createElement("input");
+    createInputDiv.appendChild(createQuantityInput);
+    createQuantityInput.setAttribute("type", "number");
+    createQuantityInput.className = "itemQuantity";
+    createQuantityInput.setAttribute("name", "itemQuantity");
+    createQuantityInput.setAttribute("min", "1");
+    createQuantityInput.setAttribute("max", "100");
+    createQuantityInput.setAttribute("value", produitsDansLocalStorage[j].quantity);
+  
+    //cart.html : <div class="cart__item__content__settings__delete">
+    let createDeleteDiv = document.createElement("div");
+    createQuantityDiv.appendChild(createDeleteDiv);
+    createDeleteDiv.className = "cart__item__content__settings__delete";
+  
+    //cart.html : <p class="deleteItem">Supprimer</p>
+    let createDeleteP = document.createElement("p");
+    createDeleteDiv.appendChild(createDeleteP);
+    createDeleteP.className = "deleteItem";
+    createDeleteP.innerText = "Supprimer";
+      }
+      calculPanier();
+    })
+
+    
 
   }
   
