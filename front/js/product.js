@@ -81,12 +81,8 @@ const ajouterAuPanier = () => {
             id : idProduct,
             quantity : productQuantity,
             color : productColor,
-            //supprimer les éléments qui seront donc ajouter par un fetch dans le cart.js
-           /* name : productName,
-            imgUrl : productImg,
-            altTxt : productAlt,
-            price : productPrice*/
-
+            price : productPrice,
+            
         };
 
         console.log(optionsProduitStockees);

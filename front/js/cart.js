@@ -4,11 +4,12 @@ let produitsDansLocalStorage = JSON.parse(localStorage.getItem("product"));
 //----------Calcul du total panier
 const calculPanier = () => {
 
-  //Affiche quantité
+  ///Affiche quantité
   let totalQuantity = 0;
   //For each + parseInt pour iterer et ajouter la quantity
   console.log(totalQuantity);
-    
+  produitsDansLocalStorage.forEach(el => totalQuantity += parseInt(el.quantity,10));
+
   //Injection dans l'Id
   if (totalQuantity === undefined) {
     document.getElementById("totalQuantity").innerText = "0";
@@ -19,7 +20,7 @@ const calculPanier = () => {
   
   //Affiche prix
   let totalPrice = 0;
-  produitsDansLocalStorage.forEach(el => totalPrice += parseInt(el.price) * parseInt(el.quantity));
+  produitsDansLocalStorage.forEach(el => totalPrice += parseInt(el.price,10) * parseInt(el.quantity,10));
   console.log(totalPrice);
 
   //Injection dans l'Id 
@@ -49,10 +50,7 @@ const AfficherPanier = () => {
   //Affichage produit(s) via DOM
   for (let j in produitsDansLocalStorage) {
       //intégrer fetch pour dynamiser les données qui n'apparaissent plus dans le storage 
-      /*name : productName,
-            imgUrl : productImg,
-            altTxt : productAlt,
-            price : productPrice*/
+      
       //Récupère les données d'un produit selon l'ID
       let getDataApiToDisplay = (num) => {
         return new Promise((resolve, reject) => {
@@ -79,85 +77,12 @@ const AfficherPanier = () => {
         }}
       }));
       
-/*
-    //Afficher les produits
-
-    let createArticle = document.createElement("article");
-    document.getElementById("cart__items").appendChild(createArticle);
-    createArticle.className = "cart__item";
-    createArticle.setAttribute("data-id", produitsDansLocalStorage[j].id)
-    createArticle.setAttribute("data-color", produitsDansLocalStorage[j].color)
-    
-    //Div Image
-    let createDivImg = document.createElement("div");
-    createArticle.appendChild(createDivImg);
-    createDivImg.className = "cart__item__img";
-
-    //Img, src, alt
-    let createImg = document.createElement("img");
-    createDivImg.appendChild(createImg);
-    createImg.setAttribute ("src", produitsDansLocalStorage[j].imgUrl);
-    createImg.setAttribute ("alt", produitsDansLocalStorage[j].altTxt);
-    
-    //Div produit
-    let createDivContent = document.createElement("div");
-    createArticle.appendChild(createDivContent);
-    createDivContent.className = "cart__item__content";
-    
-    //Div cart_item (nom du produit, couleur, prix) 
-    let createDivDescription = document.createElement("div");
-    createDivContent.appendChild(createDivDescription);
-    createDivDescription.className = "cart__item__content__description";
-  
-    //nom du produit <h2>
-    let createH2 = document.createElement("h2");
-    createDivDescription.appendChild(createH2);
-    createH2.innerText = produitsDansLocalStorage[j].name;
-    //couleur <p>
-    let createColorP = document.createElement("p");
-    createDivDescription.appendChild(createColorP);
-    createColorP.innerText = produitsDansLocalStorage[j].color;
-    //prix <p>
-    let createPriceP = document.createElement("p");
-    createDivDescription.appendChild(createPriceP);
-    createPriceP.innerText = produitsDansLocalStorage[j].price + ",00" + " €";
-  
-    //cart.html : <div class="cart__item__content__settings">
-    let createQuantityDiv = document.createElement("div");
-    createDivContent.appendChild(createQuantityDiv);
-    createQuantityDiv.className = "cart__item__content__settings";
-    
-    //cart.html : <div class="cart__item__content__settings__quantity">
-    let createInputDiv = document.createElement("div");
-    createQuantityDiv.appendChild(createInputDiv);
-    createInputDiv.className = "cart__item__content__settings__quantity";
-  
-    let createQuantityP = document.createElement("p");
-    createInputDiv.appendChild(createQuantityP);
-    createQuantityP.innerText = "Qté : ";
-    
-    let createQuantityInput = document.createElement("input");
-    createInputDiv.appendChild(createQuantityInput);
-    createQuantityInput.setAttribute("type", "number");
-    createQuantityInput.className = "itemQuantity";
-    createQuantityInput.setAttribute("name", "itemQuantity");
-    createQuantityInput.setAttribute("min", "1");
-    createQuantityInput.setAttribute("max", "100");
-    createQuantityInput.setAttribute("value", produitsDansLocalStorage[j].quantity);
-  
-    //cart.html : <div class="cart__item__content__settings__delete">
-    let createDeleteDiv = document.createElement("div");
-    createQuantityDiv.appendChild(createDeleteDiv);
-    createDeleteDiv.className = "cart__item__content__settings__delete";
-  
-    //cart.html : <p class="deleteItem">Supprimer</p>
-    let createDeleteP = document.createElement("p");
-    createDeleteDiv.appendChild(createDeleteP);
-    createDeleteP.className = "deleteItem";
-    createDeleteP.innerText = "Supprimer";*/
   }
     Promise.all(promesse).then( ()=>{
+      
       for ( let j in produitsDansLocalStorage) {
+
+        
         let createArticle = document.createElement("article");
     document.getElementById("cart__items").appendChild(createArticle);
     createArticle.className = "cart__item";
@@ -220,19 +145,61 @@ const AfficherPanier = () => {
     createQuantityInput.setAttribute("min", "1");
     createQuantityInput.setAttribute("max", "100");
     createQuantityInput.setAttribute("value", produitsDansLocalStorage[j].quantity);
+    
+     //cart.html : <div class="cart__item__content__settings__delete">
+     let createDeleteDiv = document.createElement("div");
+     createQuantityDiv.appendChild(createDeleteDiv);
+     createDeleteDiv.className = "cart__item__content__settings__delete";
+   
+     //cart.html : <p class="deleteItem">Supprimer</p>
+     let createDeleteP = document.createElement("p");
+     createDeleteDiv.appendChild(createDeleteP);
+     createDeleteP.className = "deleteItem";
+     createDeleteP.innerText = "Supprimer";
+
+     //----------Supprimer produit
+
+const supprimerProduit = () => {
   
-    //cart.html : <div class="cart__item__content__settings__delete">
-    let createDeleteDiv = document.createElement("div");
-    createQuantityDiv.appendChild(createDeleteDiv);
-    createDeleteDiv.className = "cart__item__content__settings__delete";
-  
-    //cart.html : <p class="deleteItem">Supprimer</p>
-    let createDeleteP = document.createElement("p");
-    createDeleteDiv.appendChild(createDeleteP);
-    createDeleteP.className = "deleteItem";
-    createDeleteP.innerText = "Supprimer";
+     
+  //Selectionne les classes pour supprimer articles
+ const deleteItem = document.querySelectorAll(".deleteItem");
+ console.log(deleteItem);
+  //Evénements au click sur les boutons "supprimer"
+ for (let l = 0; l < deleteItem.length; l++) {
+   deleteItem[l].addEventListener("click", (event) => {
+   event.preventDefault();
+   //Supprime l'article du DOM
+   let articleDOM = deleteItem[l].closest("article");
+   articleDOM.remove();
+   //Supprime en fonction de l'id/color
+   let deleteById = produitsDansLocalStorage[l].id;
+   let deleteByColor = produitsDansLocalStorage[l].color;
+   produitsDansLocalStorage = produitsDansLocalStorage.filter(el => el.id != deleteById || el.color != deleteByColor);
+   //MAJ localstorage
+   localStorage.setItem("product", JSON.stringify(produitsDansLocalStorage));
+   //Rafraichis la page avec les nouvelles données du storage local
+   location.reload();
+   //Supprime "product" du localstorage + nouveau calcul panier
+   if (deleteItem.length == 1) {
+     localStorage.clear();
+     calculPanier();
+   } else {
+       calculPanier();
+   }
+   
+   }
+   
+   )}
+
+}
+
+supprimerProduit ();
+   
       }
+      
       calculPanier();
+      modifierQuantitePanier();
     })
 
     
@@ -243,47 +210,7 @@ const AfficherPanier = () => {
 
 AfficherPanier ();
 
-//----------Supprimer produit
-
-const supprimerProduit = () => {
-  
-     
-       //Selectionne les classes pour régler la quantité
-      const deleteItem = document.querySelectorAll(".deleteItem");
-      console.log(deleteItem);
-       //Evénements au click sur les boutons "supprimer"
-      for (let l = 0; l < deleteItem.length; l++) {
-        deleteItem[l].addEventListener("click", (event) => {
-        event.preventDefault();
-        //Supprime l'article du DOM
-        let articleDOM = deleteItem[l].closest("article");
-        articleDOM.remove();
-        //Supprime en fonction de l'id/color
-        let deleteById = produitsDansLocalStorage[l].id;
-        let deleteByColor = produitsDansLocalStorage[l].color;
-        produitsDansLocalStorage = produitsDansLocalStorage.filter(el => el.id != deleteById || el.color != deleteByColor);
-        //MAJ localstorage
-        localStorage.setItem("product", JSON.stringify(produitsDansLocalStorage));
-        //Rafraichis la page avec les nouvelles données du storage local
-        location.reload();
-        //Supprime "product" du localstorage + nouveau calcul panier
-        if (deleteItem.length == 1) {
-          localStorage.clear();
-          calculPanier();
-        } else {
-            calculPanier();
-        }
-        
-        }
-        
-        )}
-
-}
-
-supprimerProduit ();
-
 //----------Modifier quantité(s)
-
 const modifierQuantitePanier = () => {
   //Selectionne les inputs pour régler la quantité
   const inputQuantite = document.querySelectorAll(".itemQuantity");
@@ -291,7 +218,7 @@ const modifierQuantitePanier = () => {
   inputQuantite.forEach(function (btn, index) {
     btn.addEventListener("change", function() {
         produitsDansLocalStorage = JSON.parse(localStorage.getItem("product"));
-        produitsDansLocalStorage[index].quantity = btn.value;
+        produitsDansLocalStorage[index].quantity = parseInt(btn.value,10);
       //MAJ localstorage
       localStorage.setItem("product", JSON.stringify(produitsDansLocalStorage));
       calculPanier();
@@ -300,6 +227,8 @@ const modifierQuantitePanier = () => {
 }
 
 modifierQuantitePanier();
+
+
 
 //----------Gestion du formulaire
 
