@@ -49,7 +49,6 @@ const AfficherPanier = () => {
     let promesse = [];
   //Affichage produit(s) via DOM
   for (let j in produitsDansLocalStorage) {
-      //intégrer fetch pour dynamiser les données qui n'apparaissent plus dans le storage 
       
       //Récupère les données d'un produit selon l'ID
       let getDataApiToDisplay = (num) => {
@@ -159,50 +158,54 @@ const AfficherPanier = () => {
 
      //----------Supprimer produit
 
-const supprimerProduit = () => {
-  
      
   //Selectionne les classes pour supprimer articles
- const deleteItem = document.querySelectorAll(".deleteItem");
- console.log(deleteItem);
-  //Evénements au click sur les boutons "supprimer"
- for (let l = 0; l < deleteItem.length; l++) {
-   deleteItem[l].addEventListener("click", (event) => {
-   event.preventDefault();
-   //Supprime l'article du DOM
-   let articleDOM = deleteItem[l].closest("article");
-   articleDOM.remove();
-   //Supprime en fonction de l'id/color
-   let deleteById = produitsDansLocalStorage[l].id;
-   let deleteByColor = produitsDansLocalStorage[l].color;
-   produitsDansLocalStorage = produitsDansLocalStorage.filter(el => el.id != deleteById || el.color != deleteByColor);
-   //MAJ localstorage
-   localStorage.setItem("product", JSON.stringify(produitsDansLocalStorage));
-   //Rafraichis la page avec les nouvelles données du storage local
-   location.reload();
-   //Supprime "product" du localstorage + nouveau calcul panier
-   if (deleteItem.length == 1) {
-     localStorage.clear();
-     calculPanier();
-   } else {
-       calculPanier();
-   }
-   
-   }
-   
-   )}
+  const deleteProduct = () => {
+    console.log(produitsDansLocalStorage);
+    // On pointe sur tous les boutons supprimer
+    const deleteItem = document.querySelectorAll(".deleteItem");
+    console.log(deleteItem);
+    for (let l = 0; l < deleteItem.length; l++) {
+      deleteItem[l].addEventListener("click", () => {
+        
+        // Suppression de l'élément article du DOM
+        let articleDOM = deleteItem[l].closest("article");
+        articleDOM.remove();
+  
+        // Suppression des produits du localstorage selon leur id et couleur
+        let deleteById = produitsDansLocalStorage[l].id;
+        let deleteByColor = produitsDansLocalStorage[l].color;
+        produitsDansLocalStorage = produitsDansLocalStorage.filter(el => el.id != deleteById || el.color != deleteByColor);
+        localStorage.setItem("product", JSON.stringify(produitsDansLocalStorage));
+        
+        // Si plus de produits, suppression de la clé product du localstorage et recalcul du panier
+        if (produitsDansLocalStorage.length == 0) {
+          console.log(produitsDansLocalStorage.length);
+          localStorage.clear();
+          calculPanier();
+          deleteForm();
+        
+        } else if (produitsDansLocalStorage.length == 1) {
+          console.log(produitsDansLocalStorage.length);
+          calculPanier();
+        } else {
+          
+          calculPanier();
+        }
+      
+      }
 
-}
+      )}
 
-supprimerProduit ();
+  }
+
+deleteProduct ();
    
       }
       
       calculPanier();
       modifierQuantitePanier();
     })
-
-    
 
   }
   
